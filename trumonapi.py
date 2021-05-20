@@ -55,33 +55,37 @@ async def GetTrans(DevID: str = "ALMAR0000003"):
 
     transList = []
 
-    transaksis = session.query(Transaksi).all()
-    
-    for item in transaksis:
-        #contactType = session.query(ContactType).filter(ContactType.ContactTypeId == item.ContactTypeId).one()
-        #emails = [item.__dict__ for item in session.query(Email).filter(Email.ContactId == item.ContactId)]
-        #phoneNumbers = [item.__dict__ for item in session.query(PhoneNumber).filter(PhoneNumber.ContactId == item.ContactId)]
+    try:
+        transaksis = session.query(Transaksi).all()
+        
+        for item in transaksis:
+            #contactType = session.query(ContactType).filter(ContactType.ContactTypeId == item.ContactTypeId).one()
+            #emails = [item.__dict__ for item in session.query(Email).filter(Email.ContactId == item.ContactId)]
+            #phoneNumbers = [item.__dict__ for item in session.query(PhoneNumber).filter(PhoneNumber.ContactId == item.ContactId)]
 
-        trans = {
-            "SeqNum": item.SeqNum,
-            "DeviceId": item.DeviceId,
-            "RefSN": item.RefSN,
-            "FileTime": item.FileTime,
-            "Nomor": item.Nomor,
-            "Tanggal": item.Tanggal,
-            "Jam": item.Jam,
-            "Nilai": item.Nilai,
-            "Pajak": item.Pajak,
-            "NilaiDanPajak": item.NilaiDanPajak,
-            "CustomField1": item.CustomField1,
-            "CustomField2": item.CustomField2,
-            "CustomField3": item.CustomField3,
-            "FlagTransfer": item.FlagTransfer,
-        }
+            trans = {
+                "SeqNum": item.SeqNum,
+                "DeviceId": item.DeviceId,
+                "RefSN": item.RefSN,
+                "FileTime": item.FileTime,
+                "Nomor": item.Nomor,
+                "Tanggal": item.Tanggal,
+                "Jam": item.Jam,
+                "Nilai": item.Nilai,
+                "Pajak": item.Pajak,
+                "NilaiDanPajak": item.NilaiDanPajak,
+                "CustomField1": item.CustomField1,
+                "CustomField2": item.CustomField2,
+                "CustomField3": item.CustomField3,
+                "FlagTransfer": item.FlagTransfer,
+            }
 
-        if(item.DeviceId==DevID):
-            transList.append(trans)
+            if(item.DeviceId==DevID):
+                transList.append(trans)
         #print(transList)
+    except:
+        session.rollback()
+        raise
 
     return {"data": transList}
     
